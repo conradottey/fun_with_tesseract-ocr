@@ -6,7 +6,8 @@ require 'raspell'
 # @speller = FFI::Aspell::Speller.new('en_US')
 @speller = Aspell.new("en_US")
 @speller.suggestion_mode = Aspell::NORMAL
-
+@image_size = 256
+image_url = "images/smalltext.png"
 
 
 def tessrack(oimg_name, do_gray=true, keep_temp=true)
@@ -16,11 +17,11 @@ def tessrack(oimg_name, do_gray=true, keep_temp=true)
    tiff = Magick::Image::read(oimg_name).first.deskew 
 
    # convert to grayscale if do_gray==true
-   tiff = tiff.quantize(256, Magick::GRAYColorspace) if do_gray == true
+   tiff = tiff.quantize(@image_size, Magick::GRAYColorspace) if do_gray == true
    
    # create a TIFF version of the file, as Tesseract only accepts TIFFs
    tname = "#{fname}--tesseracted.tif"
-   tiff.write(tname){|t| t.depth = 8}
+   tiff.write(tname){|t| t.depth = 16}
    puts "TR:\t#{tname} created"
     
    # Run tesseract
@@ -32,7 +33,7 @@ def tessrack(oimg_name, do_gray=true, keep_temp=true)
    File.open("#{fname}.txt"){|txt| txt.read}
 end
 
-txt = tessrack("artofwar.png")
+txt = tessrack(image_url)
 
 
 
