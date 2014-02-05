@@ -1,6 +1,7 @@
 require 'rubygems'
 require 'rmagick'
 require 'ffi/aspell'
+# require 'rapspell'
 @speller = FFI::Aspell::Speller.new('en_US')
 
 def tessrack(oimg_name, do_gray=true, keep_temp=true)
