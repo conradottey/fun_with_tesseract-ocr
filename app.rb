@@ -6,8 +6,8 @@ require 'raspell'
 # @speller = FFI::Aspell::Speller.new('en_US')
 @speller = Aspell.new("en_US")
 @speller.suggestion_mode = Aspell::NORMAL
-# @image_size = 256
-image_url = ["images/art2.png"]
+@image_scale = 2
+image_url = ["../img/IMG_5795.JPG"]
 
 
 
@@ -45,8 +45,10 @@ def tessrack(oimg_name, do_gray=true, keep_temp=true)
    
    # create a non-crooked version of the image
    tiff = Magick::Image::read(oimg_name).first.deskew 
-   tiff.scale!(2)
-   puts tiff.columns
+   tiff.resample(horizontal_res=300.0)
+   tiff.scale!(1) #Doubled the image size
+   
+   puts "#{tiff.columns} Column Size"
 
 
 
