@@ -1,8 +1,13 @@
 require 'rubygems'
 require 'rmagick'
-require 'ffi/aspell'
-# require 'rapspell'
-@speller = FFI::Aspell::Speller.new('en_US')
+# require 'ffi/aspell'
+require 'raspell'
+
+# @speller = FFI::Aspell::Speller.new('en_US')
+@speller = Aspell.new("en_US")
+@speller.suggestion_mode = Aspell::NORMAL
+
+
 
 def tessrack(oimg_name, do_gray=true, keep_temp=true)
    fname = oimg_name.chomp(File.extname(oimg_name))
@@ -48,4 +53,16 @@ def word_checker text_array
    end
 end
 
-word_checker parser_array
+def word_replace text
+   # text = "my haert wil go on"
+   text.gsub(/[\w\']+/) do |word| 
+     if !@speller.check(word) 
+       # word is wrong
+       puts "Possible correction for #{word}:"
+       puts @speller.suggest(word).first
+     end
+   end
+end
+
+word_replace txt
+# word_checker parser_array
